@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greencastle Budget Cuts Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+            <p class="font-bold">Don't like making these cuts?</p>
+            <button class="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                Tell your representatives (they're the ones who voted for it)
+            </button>
+        </div>
+        
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Greencastle Budget Cuts Simulator</h1>
+            <p class="text-gray-600">The State of Indiana is cutting Greencastle's budget by $900,000. Adjust the sliders below to balance the city budget.</p>
+        </header>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h2 class="text-xl font-semibold text-gray-800">Budget Overview</h2>
+                        <p class="text-gray-600">Greencastle's Total Budget: $9,351,922</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-red-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <div class="text-center mt-1">
+                            <span id="progress-percent" class="text-sm font-medium text-gray-700">0%</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-500">Required Cuts</p>
+                        <p id="required-cuts" class="text-2xl font-bold text-red-600">$900,000</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-500">Your Cuts</p>
+                        <p id="total-cuts" class="text-2xl font-bold text-blue-600">$0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Fire Department</span>
+                        <span id="fire-value" class="text-gray-700">$2,173,477</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="550000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="fire-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $550,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="fire-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Police Department</span>
+                        <span id="police-value" class="text-gray-700">$2,063,823</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="520000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="police-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $520,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="police-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Motor Vehicle & Highway</span>
+                        <span id="motor-value" class="text-gray-700">$1,982,550</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="500000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="motor-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $500,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="motor-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Parks & Recreation</span>
+                        <span id="parks-value" class="text-gray-700">$706,438</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="180000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="parks-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $180,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="parks-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Planning & Zoning</span>
+                        <span id="planning-value" class="text-gray-700">$500,054</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="130000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="planning-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $130,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="planning-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Public Works & Safety</span>
+                        <span id="public-works-value" class="text-gray-700">$483,000</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="120000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="public-works-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $130,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="public-works-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Cemetery</span>
+                        <span id="cemetery-value" class="text-gray-700">$319,556</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="80000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="cemetery-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $80,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="cemetery-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Elected & Appointed City Officials</span>
+                        <span id="city-officials-value" class="text-gray-700">$873,024</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="220000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="city-officials-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $220,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="city-officials-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div id="success-message" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    <p>Congratulations! You've successfully balanced Greencastle's budget with $900,000 in cuts.</p>
+                </div>
+                <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <p>You need to cut exactly $900,000 to balance Greencastle's budget. Current cuts: <span id="current-cut-display">$0</span></p>
+                </div>
+                <button id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+                    Submit Your Budget Proposal
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Budget Summary</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Original Budget</h3>
+                        <ul class="space-y-2">
+                            <li class="flex justify-between"><span>Fire Department:</span> <span>$2,173,477</span></li>
+                            <li class="flex justify-between"><span>Police Department:</span> <span>$2,063,823</span></li>
+                            <li class="flex justify-between"><span>Motor Vehicle & Highway:</span> <span>$1,982,550</span></li>
+                            <li class="flex justify-between"><span>Parks and Recreation:</span> <span>$706,438</span></li>
+                            <li class="flex justify-between"><span>Planning & Zoning:</span> <span>$500,054</span></li>
+                            <li class="flex justify-between"><span>Public Works & Safety:</span> <span>$483,000</span></li>
+                            <li class="flex justify-between"><span>Cemetery:</span> <span>$319,556</span></li>
+                            <li class="flex justify-between"><span>Elected & Appointed City Officials:</span> <span>$873,024</span></li>
+
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Proposed Changes</h3>
+                        <ul class="space-y-2">
+                            <li class="flex justify-between"><span>Fire Department:</span> <span id="summary-fire">$0</span></li>
+                            <li class="flex justify-between"><span>Police Department:</span> <span id="summary-police">$0</span></li>
+                            <li class="flex justify-between"><span>Motor Vehicle & Highway:</span> <span id="summary-motor">$0</span></li>
+                            <li class="flex justify-between"><span>Parks and Recreation:</span> <span id="summary-parks">$0</span></li>
+                            <li class="flex justify-between"><span>Planning & Zoning:</span> <span id="summary-planning">$0</span></li>
+                            <li class="flex justify-between"><span>Public Works & Safety:</span> <span id="summary-public-works">$0</span></li>
+                            <li class="flex justify-between"><span>Cemetery:</span> <span id="summary-cemetery">$0</span></li>
+                            <li class="flex justify-between"><span>Elected & Appointed City Officials:</span> <span id="summary-city-officials">$0</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded mt-8">
+            <h2 class="text-2xl font-bold mb-4">Want to know more about why this is happening?</h2>
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full">
+                Click here to learn more about SB1
+            </button>
+        </div>
+
+        <footer class="text-center text-gray-500 text-sm mt-8">
+            <p>&copy; 2023 Greencastle Budget Cuts Simulator. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial budget values
+    const initialBudgets = {
+        fire: 2173477,
+        police: 2063823,
+        motor: 1982550,
+        parks: 706438,
+        planning: 500054,
+        works: 483000,
+        cemetery: 319556,
+        city: 873024
+    };
+
+    // Max cuts for each department
+    const maxCuts = {
+        fire: 550000,
+        police: 520000,
+        motor: 500000,
+        parks: 180000,
+        planning: 130000,
+        works: 130000,
+        cemetery: 80000,
+        city: 220000
+    };
+
+    // Impact descriptions
+    const impactDescriptions = {
+        fire: [
+            "No impact",
+            "Cut salaries, overtime, and clothing allowance for firefighters",
+            "Major cuts to firefighter salaries",
+            "Lay off firefighters, reduction in capacity (longer response times, fewer non-emergency responses)"
+        ],
+        police: [
+            "No impact",
+            "Cut salaries, overtime, and clothing allowance for police officers",
+            "Major cuts to police & administrator salaries",
+            "Lay off police, reduction in capacity (longer response times, fewer non-emergency responses"
+        ],
+        motor: [
+            "No impact",
+            "Cut all overtime, major reductions to snow removal",
+            "Cut employee salaries, major reductions to capacity (snow removal much fewer streets, no vehicle & building maintenance, no landscape removal)",
+            "Lay off employees, major reductions to capacity (snow removal on major streets only, much less resurfacing and repair)"
+        ],
+        parks: [
+            "No impact",
+            "Cut recreation programs, reduce maintenance, cut equipment repairs",
+            "Cut salaries, reduce part-time staff, major reductions in maintenance. (very little mowing), close the pool",
+            "Lay off some full-time staff, major reductions in maintenance. (very little mowing), close the pool"
+        ],
+        planning: [
+            "No impact",
+            "Reduce salaries. Cut back on technology, education, weed control, and office supplies.",
+            "Lay off employees, major reductions to capacity",
+            "Lay off employees, unable to keep up with legally required duties"
+        ],
+        works: [
+            "No impact",
+            "Cut back on city phones, find major electricity savings, and reduce all technology maintenance",
+            "Cannot be done without cutting required utility services or emergency services",
+            "Cannot be done without cutting required utility services, emergency services, or required insurance for police & fire"
+        ],
+        cemetery: [
+            "No impact",
+            "Cut overtime, reduce vehicle maintenance, cut mowing in half",
+            "Cut salaries, reduce vehicle maintenance, cut mowing in half",
+            "No part-time employees, very little mowing, very little maintenance"
+        ],
+        city: [
+            "No impact",
+            "Cut back on technology, education, and office supplies, reduce contracted & consulting services",
+            "Major cuts to maintenance, reduce services to only those legally required",
+            "Cannot be done without cutting required insurance or legal duties"
+        ]
+    };
+
+    // Required cuts
+    const requiredCuts = 900000;
+    let totalCuts = 0;
+
+    // Get all sliders
+    const sliders = {
+        fire: document.getElementById('fire-slider'),
+        police: document.getElementById('police-slider'),
+        motor: document.getElementById('motor-slider'),
+        parks: document.getElementById('parks-slider'),
+        planning: document.getElementById('planning-slider'),
+        works: document.getElementById('public-works-slider'),
+        cemetery: document.getElementById('cemetery-slider'),
+        city: document.getElementById('city-officials-slider')
+    };
+
+    // Get all value displays
+    const valueDisplays = {
+        fire: document.getElementById('fire-value'),
+        police: document.getElementById('police-value'),
+        motor: document.getElementById('motor-value'),
+        parks: document.getElementById('parks-value'),
+        planning: document.getElementById('planning-value'),
+        works: document.getElementById('public-works-value'),
+        cemetery: document.getElementById('cemetery-value'),
+        city: document.getElementById('city-officials-value')
+    };
+
+    // Get all impact displays
+    const impactDisplays = {
+        fire: document.getElementById('fire-impact'),
+        police: document.getElementById('police-impact'),
+        motor: document.getElementById('motor-impact'),
+        parks: document.getElementById('parks-impact'),
+        planning: document.getElementById('planning-impact'),
+        works: document.getElementById('public-works-impact'),
+        cemetery: document.getElementById('cemetery-impact'),
+        city: document.getElementById('city-officials-impact')
+    };
+
+    // Get summary displays
+    const summaryDisplays = {
+        fire: document.getElementById('summary-fire'),
+        police: document.getElementById('summary-police'),
+        motor: document.getElementById('summary-motor'),
+        parks: document.getElementById('summary-parks'),
+        planning: document.getElementById('summary-planning'),
+        works: document.getElementById('summary-public-works'),
+        cemetery: document.getElementById('summary-cemetery'),
+        city: document.getElementById('summary-city-officials')
+    };
+
+    // Get other UI elements
+    const totalCutsDisplay = document.getElementById('total-cuts');
+    const progressPercent = document.getElementById('progress-percent');
+    const progressBar = document.getElementById('progress-bar');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+    const currentCutDisplay = document.getElementById('current-cut-display');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Add event listeners to all sliders
+    Object.keys(sliders).forEach(department => {
+        sliders[department].addEventListener('input', function() {
+            updateDepartment(department);
+            updateTotalCuts();
+            updateProgressCircle();
+            updateSummary();
+            checkCompletion();
+        });
+    });
+
+    // Update department display
+    function updateDepartment(department) {
+        const cutAmount = parseInt(sliders[department].value);
+        const newBudget = initialBudgets[department] - cutAmount;
+        
+        // Update the displayed value
+        valueDisplays[department].textContent = `$${formatNumber(newBudget)}`;
+        
+        // Update the impact description
+        const impactLevels = impactDescriptions[department];
+        const maxCut = maxCuts[department];
+        if (cutAmount > 0) {
+            const impactIndex = Math.ceil((cutAmount / maxCut) * (impactLevels.length - 1));
+            impactDisplays[department].textContent = impactLevels[impactIndex];
+        } else {
+            impactDisplays[department].textContent = impactLevels[0]; // Default to "No impact" when no cuts
+        }
+    }
+
+    // Update total cuts
+    function updateTotalCuts() {
+        totalCuts = 0;
+        Object.keys(sliders).forEach(department => {
+            totalCuts += Number(sliders[department].value);
+        });
+        
+        totalCutsDisplay.textContent = `$${formatNumber(totalCuts)}`;
+        
+        // Change color based on progress
+        if (totalCuts >= requiredCuts) {
+            totalCutsDisplay.classList.remove('text-red-600');
+            totalCutsDisplay.classList.add('text-green-600');
+        } else {
+            totalCutsDisplay.classList.remove('text-green-600');
+            totalCutsDisplay.classList.add('text-red-600');
+        }
+    }
+
+    // Update progress bar
+    function updateProgressCircle() {
+        const percentage = Math.min(totalCuts / requiredCuts, 1) * 100;
+        progressBar.style.width = `${percentage}%`;
+        progressPercent.textContent = `${Math.round(percentage)}%`;
+        
+        // Change color based on progress
+        if (percentage >= 100) {
+            progressBar.classList.remove('bg-red-500');
+            progressBar.classList.add('bg-green-500');
+        } else {
+            progressBar.classList.remove('bg-green-500');
+            progressBar.classList.add('bg-red-500');
+        }
+    }
+
+    // Update summary
+    function updateSummary() {
+        Object.keys(summaryDisplays).forEach(department => {
+            const cutAmount = Number(sliders[department].value);
+            summaryDisplays[department].textContent = cutAmount > 0 ? `-$${formatNumber(cutAmount)}` : '$0';
+        });
+    }
+
+    // Check if cuts meet requirement
+    function checkCompletion() {
+        if (totalCuts === requiredCuts) {
+            successMessage.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            submitBtn.classList.remove('bg-blue-600');
+            submitBtn.classList.add('bg-green-600');
+        } else {
+            successMessage.classList.add('hidden');
+            errorMessage.classList.remove('hidden');
+            currentCutDisplay.textContent = `$${formatNumber(totalCuts)}`;
+            submitBtn.classList.remove('bg-green-600');
+            submitBtn.classList.add('bg-blue-600');
+        }
+    }
+
+    // Format number with commas
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Submit button handler
+    submitBtn.addEventListener('click', function() {
+        if (totalCuts === requiredCuts) {
+            alert('Thank you for balancing Greencastle\'s budget! Your proposal has been submitted to city council.');
+        } else {
+            alert(`You need to cut exactly $${formatNumber(requiredCuts)}. Currently you've cut $${formatNumber(totalCuts)}.`);
+        }
+    });
+
+    // Initialize all departments
+    Object.keys(sliders).forEach(department => {
+        updateDepartment(department);
+    });
+    updateTotalCuts();
+    updateProgressCircle();
+    updateSummary();
+    checkCompletion();
+});
+    </script>
+</body>
+</html>
