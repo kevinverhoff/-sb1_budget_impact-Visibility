@@ -10,7 +10,7 @@
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 20px;More actions
+            width: 20px;
             height: 20px;
             border-radius: 50%;
             background: #3b82f6;
@@ -33,7 +33,7 @@
                 Tell your representatives (they're the ones who voted for it)
             </button>
         </div>
-
+        
         <header class="mb-8 text-center">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Greencastle Budget Cuts Simulator</h1>
             <p class="text-gray-600">The State of Indiana is cutting Greencastle's budget by $900,000. Adjust the sliders below to balance the city budget.</p>
@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ],
         motor: [
             "No impact",
-            "Cut overtime, major reductions to snow removal",
+            "Cut all overtime, major reductions to snow removal",
             "Cut employee salaries, major reductions to capacity (snow removal much fewer streets, no vehicle & building maintenance, no landscape removal)",
             "Lay off employees, major reductions to capacity (snow removal on major streets only, much less resurfacing and repair)"
         ],
@@ -433,10 +433,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateDepartment(department) {
         const cutAmount = parseInt(sliders[department].value);
         const newBudget = initialBudgets[department] - cutAmount;
-
+        
         // Update the displayed value
         valueDisplays[department].textContent = `$${formatNumber(newBudget)}`;
-
+        
         // Update the impact description
         const impactLevels = impactDescriptions[department];
         const maxCut = maxCuts[department];
@@ -454,9 +454,9 @@ document.addEventListener('DOMContentLoaded', function() {
         Object.keys(sliders).forEach(department => {
             totalCuts += Number(sliders[department].value);
         });
-
+        
         totalCutsDisplay.textContent = `$${formatNumber(totalCuts)}`;
-
+        
         // Change color based on progress
         if (totalCuts >= requiredCuts) {
             totalCutsDisplay.classList.remove('text-red-600');
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const percentage = Math.min(totalCuts / requiredCuts, 1) * 100;
         progressBar.style.width = `${percentage}%`;
         progressPercent.textContent = `${Math.round(percentage)}%`;
-
+        
         // Change color based on progress
         if (percentage >= 100) {
             progressBar.classList.remove('bg-red-500');
