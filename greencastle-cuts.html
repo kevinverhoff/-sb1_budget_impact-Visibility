@@ -270,7 +270,7 @@
 
         <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded mt-8">
             <h2 class="text-2xl font-bold mb-4">Want to know more about why this is happening?</h2>
-            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full">
+            <button onclick="window.location.href = 'sb1-info.html'" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full">
                 Click here to learn more about SB1
             </button>
         </div>
@@ -516,7 +516,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Submit button handler
     submitBtn.addEventListener('click', function() {
         if (totalCuts === requiredCuts) {
-            alert('Thank you for balancing Greencastle\'s budget! Your proposal has been submitted to city council.');
+            // Get all slider values
+            const cuts = {
+                fire: document.getElementById('fire-slider').value,
+                police: document.getElementById('police-slider').value,
+                motor: document.getElementById('motor-slider').value,
+                parks: document.getElementById('parks-slider').value,
+                planning: document.getElementById('planning-slider').value,
+                publicworks: document.getElementById('public-works-slider').value,
+                cemetery: document.getElementById('cemetery-slider').value,
+                cityofficials: document.getElementById('city-officials-slider').value
+            };
+
+            // Build the query string
+            let queryString = '?';
+            const params = new URLSearchParams();
+            Object.entries(cuts).forEach(([department, value]) => {
+                params.set(department, value);
+            });
+            queryString += params.toString();
+
+            // Redirect to the form page with the cuts as URL parameters
+            window.location.href = 'greencastle-cuts-form.html' + queryString;
         } else {
             alert(`You need to cut exactly $${formatNumber(requiredCuts)}. Currently you've cut $${formatNumber(totalCuts)}.`);
         }
