@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greencastle School Corporation Budget Cuts Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+            <p class="font-bold">Don't like making these cuts?</p>
+            <button class="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                Tell your representatives (they're the ones who voted for it)
+            </button>
+        </div>
+        
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Greencastle School Corporation Budget Cuts Simulator</h1>
+            <p class="text-gray-600">The State of Indiana is cutting the Greencastle School Corporation's budget by $490,000. Adjust the sliders below to balance the school budget.</p>
+        </header>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h2 class="text-xl font-semibold text-gray-800">Budget Overview</h2>
+                        <p class="text-gray-600">Greencastle School Corporation's Total Education Budget: $13,638,006</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-red-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <div class="text-center mt-1">
+                            <span id="progress-percent" class="text-sm font-medium text-gray-700">0%</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-500">Required Cuts</p>
+                        <p id="required-cuts" class="text-2xl font-bold text-red-600">$490,000</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-500">Your Cuts</p>
+                        <p id="total-cuts" class="text-2xl font-bold text-blue-600">$0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Regular Programs - Personnel</span>
+                        <span id="RegPersonnel-value" class="text-gray-700">$9,221,575</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="490000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="RegPersonnel-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $490,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="RegPersonnel-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Classroom Supplies</span>
+                        <span id="RegSupplies-value" class="text-gray-700">$81,000</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="81001" step="9000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="RegSupplies-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $81,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="RegSupplies-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Regular Program Services</span>
+                        <span id="RegServices-value" class="text-gray-700">$405,000</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="405000" step="5000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="RegServices-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $405,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="RegServices-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Special Programs - Personnel</span>
+                        <span id="SpecPersonnel-value" class="text-gray-700">$936,500</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="490000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="SpecPersonnel-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $490,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="SpecPersonnel-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Special Education Supplies</span>
+                        <span id="SpecSupplies-value" class="text-gray-700">$12,806</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="12800" step="1280" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="SpecSupplies-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $12,806</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="SpecSupplies-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Summer School Personnel</span>
+                        <span id="SumPersonnel-value" class="text-gray-700">$20,000</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="20000" step="1000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="SumPersonnel-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $20,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="SumPersonnel-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Student Support Services - Personnel</span>
+                        <span id="StuSupPersonnel-value" class="text-gray-700">$856,225</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="300000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="StuSupPersonnel-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $300,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="StuSupPersonnel-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Student Support Services - Supplies</span>
+                        <span id="StuSupSupplies-value" class="text-gray-700">$10,000</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="10000" step="1000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="StuSupSupplies-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $10,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="StuSupSupplies-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Student Support Services - Other Services</span>
+                        <span id="StuSupServices-value" class="text-gray-700">$33,000</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="33000" step="1000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="StuSupServices-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $33,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="StuSupServices-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Instructional Support Services - Supplies</span>
+                        <span id="InstSupSupplies-value" class="text-gray-700">$42,750</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="42000" step="1000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="InstSupSupplies-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $42,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="InstSupSupplies-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Administrative Personnel</span>
+                        <span id="AdmPersonnel-value" class="text-gray-700">$1,588,500</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="500000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="AdmPersonnel-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $500,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="AdmPersonnel-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700 font-medium">Community Services - Personnel</span>
+                        <span id="ComServOpsPersonnel-value" class="text-gray-700">$430,650</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-2 w-8 text-center"><i class="fas fa-minus"></i></span>
+                        <input type="range" min="0" max="430000" step="10000" value="0" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="ComServOpsPersonnel-slider">
+                        <span class="text-green-500 ml-2 w-8 text-center"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>No cuts</span>
+                        <span>Max cut: $430,000</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <p>Impact: <span id="ComServOpsPersonnel-impact" class="font-medium">No impact</span></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div id="success-message" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    <p>Congratulations! You've successfully balanced Greencastle School Corporation's budget with $490,000 in cuts.</p>
+                </div>
+                <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <p>You need to cut exactly $490,000 to balance Greencastle School Corporation's budget. Current cuts: <span id="current-cut-display">$0</span></p>
+                </div>
+                <button id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+                    Submit Your Budget Proposal
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Budget Summary</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Original Budget</h3>
+                        <ul class="space-y-2">
+                            <li class="flex justify-between"><span>Regular Programs - Personnel:</span> <span>$9,221,575 </span></li>
+                            <li class="flex justify-between"><span>Classroom Supplies:</span> <span>$2,063,823</span></li>
+                            <li class="flex justify-between"><span>Regular Program Services:</span> <span>$405,000</span></li>
+                            <li class="flex justify-between"><span>Special Services - Personnel:</span> <span>$936,500</span></li>
+                            <li class="flex justify-between"><span>Special Education Supplies:</span> <span>$12,806</span></li>
+                            <li class="flex justify-between"><span>Summer School Personnel:</span> <span>$20,000</span></li>
+                            <li class="flex justify-between"><span>Student Support Services - Personnel:</span> <span>$856,225</span></li>
+                            <li class="flex justify-between"><span>Student Support Services - Supplies:</span> <span>$10,000</span></li>
+                            <li class="flex justify-between"><span>Student Support Services - Other Services:</span> <span>$33,000</span></li>
+                            <li class="flex justify-between"><span>Instructional Support Services - Supplies:</span> <span>$42,750</span></li>
+                            <li class="flex justify-between"><span>Administrative Personnel:</span> <span>$1,588,500</span></li>
+                            <li class="flex justify-between"><span>Community Services - Personnel:</span> <span>$430,650</span></li>
+
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Proposed Changes</h3>
+                        <ul class="space-y-2">
+                            <li class="flex justify-between"><span>Regular Programs - Personnel:</span> <span id="summary-RegPersonnel">$0</span></li>
+                            <li class="flex justify-between"><span>Classroom Supplies:</span> <span id="summary-RegSupplies">$0</span></li>
+                            <li class="flex justify-between"><span>Regular Program Services:</span> <span id="summary-RegServices">$0</span></li>
+                            <li class="flex justify-between"><span>Special Services - Personnel:</span> <span id="summary-SpecPersonnel">$0</span></li>
+                            <li class="flex justify-between"><span>Special Education Supplies:</span> <span id="summary-SpecSupplies">$0</span></li>
+                            <li class="flex justify-between"><span>Summer School Personnel:</span> <span id="summary-SumPersonnel">$0</span></li>
+                            <li class="flex justify-between"><span>Student Support Services - Personnel:</span> <span id="summary-StuSupPersonnel">$0</span></li>
+                            <li class="flex justify-between"><span>Student Support Services - Supplies:</span> <span id="summary-StuSupSupplies">$0</span></li>
+                            <li class="flex justify-between"><span>Student Support Services - Other Services:</span> <span id="summary-StuSupServices">$0</span></li>
+                            <li class="flex justify-between"><span>Instructional Support Services - Supplies:</span> <span id="summary-InstSupSupplies">$0</span></li>
+                            <li class="flex justify-between"><span>Administrative Personnel:</span> <span id="summary-AdmPersonnel">$0</span></li>
+                            <li class="flex justify-between"><span>Community Services - Personnel:</span> <span id="summary-ComServOpsPersonnel">$0</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded mt-8">
+            <h2 class="text-2xl font-bold mb-4">Want to know more about why this is happening?</h2>
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full">
+                Click here to learn more about SB1
+            </button>
+        </div>
+
+        <footer class="text-center text-gray-500 text-sm mt-8">
+            <p>&copy; 2025 Budget Cuts Simulator. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial budget values
+    const initialBudgets = {
+        RegPersonnel: 9221575,
+        RegSupplies: 81000,
+        RegServices: 405000,
+        SpecPersonnel: 936500,
+        SpecSupplies: 12806,
+        SumPersonnel: 20000,
+        StuSupPersonnel: 856225,
+        StuSupSupplies: 10000,
+        StuSupServices: 33000,
+        InstSupSupplies: 42750,
+        AdmPersonnel: 1588500,
+        ComServOpsPersonnel: 430650,
+    };
+
+    // Max cuts for each department
+    const maxCuts = {
+        RegPersonnel: 490000,
+        RegSupplies: 81000,
+        RegServices: 405000,
+        SpecPersonnel: 490000,
+        SpecSupplies: 12806,
+        SumPersonnel: 20000,
+        StuSupPersonnel: 300000,
+        StuSupSupplies: 10000,
+        StuSupServices: 33000,
+        InstSupSupplies: 42000,
+        AdmPersonnel: 500000,
+        ComServOpsPersonnel: 430000,
+    };
+
+    // Impact descriptions
+    const impactDescriptions = {
+        RegPersonnel: [
+            "No impact",
+            "Reduce replacement hires, gradually cut programs like art, music, and physical education",
+            "Stop replacement hires, larger class sizes, and major cuts to programs like art, music, and physical education",
+            "Lay off all staff not required by law, major cuts to all programs, and no replacement hires"
+        ],
+        RegSupplies: [
+            "No impact",
+            "Cuts to classroom supplies, require students to bring even more supplies from home",
+            "Mass reduction of classroom supplies, far below the bare minimum. Require students to bring nearly all supplies from home",
+            "Absolute Minimum or No Classroom Supplies. Teachers must buy their own supplies, or require students to bring all supplies from home"
+        ],
+        RegServices: [
+            "No impact",
+            "Cut additional Career & Technical Education programs",
+            "Major cuts to Career & Technical Education programs, cut all non-essential services",
+            "Eliminate all Career & Technical Education programs"
+        ],
+        SpecPersonnel: [
+            "No impact",
+            "Cut back on special education staff, increase staff case loads",
+            "Major cuts to special education staff, increase staff case loads significantly. Likely to violate federal law",
+            "Cuts to special education staff to nearly half. Cannot be done without cutting legally-required services"
+        ],
+        SpecSupplies: [
+            "No impact",
+            "Cut 1 here",
+            "Cut 2 here",
+            "Cut 3 here"
+        ],
+        SumPersonnel: [
+            "No impact",
+            "Cut 1 here",
+            "Cut 2 here",
+            "Cut 3 here"
+        ],
+        StuSupPersonnel: [
+            "No impact",
+            "Cut 1 here",
+            "Cut 2 here",
+            "Cut 3 here"
+        ],
+        StuSupSupplies: [
+            "No impact",
+            "Cut 1 here",
+            "Cut 2 here",
+            "Cut 3 here"
+        ],
+        StuSupServices: [
+            "No impact",
+            "Cut 1 here",
+            "Cut 2 here",
+            "Cut 3 here"
+        ],
+        InstSupSupplies: [
+            "No impact",
+            "Cut 1 here",
+            "Cut 2 here",
+            "Cut 3 here"
+        ],
+        AdmPersonnel: [
+            "No impact",
+            "Cut 1 here",
+            "Cut 2 here",
+            "Cut 3 here"
+        ],
+        ComServOpsPersonnel: [
+            "No impact",
+            "Cut 1 here",
+            "Cut 2 here",
+            "Cut 3 here"
+        ],
+    };
+
+    // Required cuts
+    const requiredCuts = 490000;
+    let totalCuts = 0;
+
+    // Get all sliders
+    const sliders = {
+        RegPersonnel: document.getElementById('RegPersonnel-slider'),
+        RegSupplies: document.getElementById('RegSupplies-slider'),
+        RegServices: document.getElementById('RegServices-slider'),
+        SpecPersonnel: document.getElementById('SpecPersonnel-slider'),
+        SpecSupplies: document.getElementById('SpecSupplies-slider'),
+        SumPersonnel: document.getElementById('SumPersonnel-slider'),
+        StuSupPersonnel: document.getElementById('StuSupPersonnel-slider'),
+        StuSupSupplies: document.getElementById('StuSupSupplies-slider'),
+        StuSupServices: document.getElementById('StuSupServices-slider'),
+        InstSupSupplies: document.getElementById('InstSupSupplies-slider'),
+        AdmPersonnel: document.getElementById('AdmPersonnel-slider'),
+        ComServOpsPersonnel: document.getElementById('ComServOpsPersonnel-slider'),
+    };
+
+    // Get all value displays
+    const valueDisplays = {
+        RegPersonnel: document.getElementById('RegPersonnel-value'),
+        RegSupplies : document.getElementById('RegSupplies-value'),
+        RegServices: document.getElementById('RegServices-value'),
+        SpecPersonnel: document.getElementById('SpecPersonnel-value'),
+        SpecSupplies: document.getElementById('SpecSupplies-value'),
+        SumPersonnel: document.getElementById('SumPersonnel-value'),
+        StuSupPersonnel: document.getElementById('StuSupPersonnel-value'),
+        StuSupSupplies: document.getElementById('StuSupSupplies-value'),
+        StuSupServices: document.getElementById('StuSupServices-value'),
+        InstSupSupplies: document.getElementById('InstSupSupplies-value'),
+        AdmPersonnel: document.getElementById('AdmPersonnel-value'),
+        ComServOpsPersonnel: document.getElementById('ComServOpsPersonnel-value'),
+    };
+
+    // Get all impact displays
+    const impactDisplays = {
+        RegPersonnel: document.getElementById('RegPersonnel-impact'),
+        RegSupplies: document.getElementById('RegSupplies-impact'),
+        RegServices: document.getElementById('RegServices-impact'),
+        SpecPersonnel: document.getElementById('SpecPersonnel-impact'),
+        SpecSupplies: document.getElementById('SpecSupplies-impact'),
+        SumPersonnel: document.getElementById('SumPersonnel-impact'),
+        StuSupPersonnel: document.getElementById('StuSupPersonnel-impact'),
+        StuSupSupplies: document.getElementById('StuSupSupplies-impact'),
+        StuSupServices: document.getElementById('StuSupServices-impact'),
+        InstSupSupplies: document.getElementById('InstSupSupplies-impact'),
+        AdmPersonnel: document.getElementById('AdmPersonnel-impact'),
+        ComServOpsPersonnel: document.getElementById('ComServOpsPersonnel-impact'),
+    };
+
+    // Get summary displays
+    const summaryDisplays = {
+        RegPersonnel: document.getElementById('summary-RegPersonnel'),
+        RegSupplies: document.getElementById('summary-RegSupplies'),
+        RegServices: document.getElementById('summary-RegServices'),
+        SpecPersonnel: document.getElementById('summary-SpecPersonnel'),
+        SpecSupplies: document.getElementById('summary-SpecSupplies'),
+        SumPersonnel: document.getElementById('summary-SumPersonnel'),
+        StuSupPersonnel: document.getElementById('summary-StuSupPersonnel'),
+        StuSupSupplies: document.getElementById('summary-StuSupSupplies'),
+        StuSupServices: document.getElementById('summary-StuSupServices'),
+        InstSupSupplies: document.getElementById('summary-InstSupSupplies'),
+        AdmPersonnel: document.getElementById('summary-AdmPersonnel'),
+        ComServOpsPersonnel: document.getElementById('summary-ComServOpsPersonnel'),
+    };
+
+    // Get other UI elements
+    const totalCutsDisplay = document.getElementById('total-cuts');
+    const progressPercent = document.getElementById('progress-percent');
+    const progressBar = document.getElementById('progress-bar');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+    const currentCutDisplay = document.getElementById('current-cut-display');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Add event listeners to all sliders
+    Object.keys(sliders).forEach(department => {
+        sliders[department].addEventListener('input', function() {
+            updateDepartment(department);
+            updateTotalCuts();
+            updateProgressCircle();
+            updateSummary();
+            checkCompletion();
+        });
+    });
+
+    // Update department display
+    function updateDepartment(department) {
+        const cutAmount = parseInt(sliders[department].value);
+        const newBudget = initialBudgets[department] - cutAmount;
+        
+        // Update the displayed value
+        valueDisplays[department].textContent = `$${formatNumber(newBudget)}`;
+        
+        // Update the impact description
+        const impactLevels = impactDescriptions[department];
+        const maxCut = maxCuts[department];
+        if (cutAmount > 0) {
+            const impactIndex = Math.ceil((cutAmount / maxCut) * (impactLevels.length - 1));
+            impactDisplays[department].textContent = impactLevels[impactIndex];
+        } else {
+            impactDisplays[department].textContent = impactLevels[0]; // Default to "No impact" when no cuts
+        }
+    }
+
+    // Update total cuts
+    function updateTotalCuts() {
+        totalCuts = 0;
+        Object.keys(sliders).forEach(department => {
+            totalCuts += Number(sliders[department].value);
+        });
+        
+        totalCutsDisplay.textContent = `$${formatNumber(totalCuts)}`;
+        
+        // Change color based on progress
+        if (totalCuts >= requiredCuts) {
+            totalCutsDisplay.classList.remove('text-red-600');
+            totalCutsDisplay.classList.add('text-green-600');
+        } else {
+            totalCutsDisplay.classList.remove('text-green-600');
+            totalCutsDisplay.classList.add('text-red-600');
+        }
+    }
+
+    // Update progress bar
+    function updateProgressCircle() {
+        const percentage = Math.min(totalCuts / requiredCuts, 1) * 100;
+        progressBar.style.width = `${percentage}%`;
+        progressPercent.textContent = `${Math.round(percentage)}%`;
+        
+        // Change color based on progress
+        if (percentage >= 100) {
+            progressBar.classList.remove('bg-red-500');
+            progressBar.classList.add('bg-green-500');
+        } else {
+            progressBar.classList.remove('bg-green-500');
+            progressBar.classList.add('bg-red-500');
+        }
+    }
+
+    // Update summary
+    function updateSummary() {
+        Object.keys(summaryDisplays).forEach(department => {
+            const cutAmount = Number(sliders[department].value);
+            summaryDisplays[department].textContent = cutAmount > 0 ? `-$${formatNumber(cutAmount)}` : '$0';
+        });
+    }
+
+    // Check if cuts meet requirement
+    function checkCompletion() {
+        if (totalCuts === requiredCuts) {
+            successMessage.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            submitBtn.classList.remove('bg-blue-600');
+            submitBtn.classList.add('bg-green-600');
+        } else {
+            successMessage.classList.add('hidden');
+            errorMessage.classList.remove('hidden');
+            currentCutDisplay.textContent = `$${formatNumber(totalCuts)}`;
+            submitBtn.classList.remove('bg-green-600');
+            submitBtn.classList.add('bg-blue-600');
+        }
+    }
+
+    // Format number with commas
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Submit button handler
+    submitBtn.addEventListener('click', function() {
+        if (totalCuts === requiredCuts) {
+            alert('Thank you for balancing Greencastle\'s budget! Your proposal has been submitted to city council.');
+        } else {
+            alert(`You need to cut exactly $${formatNumber(requiredCuts)}. Currently you've cut $${formatNumber(totalCuts)}.`);
+        }
+    });
+
+    // Initialize all departments
+    Object.keys(sliders).forEach(department => {
+        updateDepartment(department);
+    });
+    updateTotalCuts();
+    updateProgressCircle();
+    updateSummary();
+    checkCompletion();
+});
+    </script>
+</body>
+</html>
